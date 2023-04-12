@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import styles from "./sort-settings.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fitlerByPlatform,
-  searchGames,
-  yearSortToggle,
-} from "../../services/slice/gamesSlice";
+import { fitlerByPlatform, searchGames } from "../../services/slice/gamesSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getParam } from "../../services/utils";
 
@@ -33,10 +29,16 @@ function SortSettings() {
   return (
     <ul className={styles.list}>
       <li>
-        <input type="text" value={searchValue} onChange={onInputChange} />
+        <input
+          placeholder="Название игры"
+          className={styles.navElem}
+          type="text"
+          value={searchValue}
+          onChange={onInputChange}
+        />
       </li>
       <li>
-        <button onClick={onClick} type="button">
+        <button className={styles.navElem} onClick={onClick} type="button">
           sortByYear
         </button>
         <span>
@@ -45,7 +47,11 @@ function SortSettings() {
         </span>
       </li>
       <li>
-        <select onChange={onSelectChange} defaultValue="ALL">
+        <select
+          className={styles.navElem}
+          onChange={onSelectChange}
+          defaultValue="ALL"
+        >
           <option value="ALL">ALL</option>
           <option value="PC">PC</option>
           <option value="BROWSER">BROWSER</option>

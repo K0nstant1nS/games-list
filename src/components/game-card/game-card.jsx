@@ -13,33 +13,44 @@ function GameCard({
   id,
 }) {
   const ref = useRef(null);
+  const modalRef = useRef(null);
   const dispatch = useDispatch();
   const { mouseOver } = useSelector((store) => store.gamesReducer);
 
   const setMouseOverHandler = (e) => {
+    console.log(e.target);
     dispatch(setMouseOver(id));
   };
-  const setMouseOutHandler = () => {
+  const setMouseOutHandler = (e) => {
     dispatch(setMouseOver(undefined));
   };
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.addEventListener("mouseover", setMouseOverHandler);
-      ref.current.addEventListener("mouseout", setMouseOutHandler);
+      ref.current.addEventListener("mouseenter", setMouseOverHandler);
     }
     return () => {
       if (ref.current) {
-        ref.current.removeEventListener("mouseover", setMouseOverHandler);
-        ref.current.removeEventListener("mouseout", setMouseOutHandler);
+        ref.current.removeEventListener("mouseenter", setMouseOverHandler);
       }
     };
   }, [ref.current]);
 
+  useEffect(() => {
+    if (modalRef.current) {
+      modalRef.current.addEventListener("mouseleave", setMouseOutHandler);
+    }
+    return () => {
+      if (modalRef.current) {
+        modalRef.current.removeEventListener("mouseleave", setMouseOutHandler);
+      }
+    };
+  }, [modalRef.current]);
+
   return (
     <article ref={ref} className={styles.card}>
       {mouseOver === id ? (
-        <div className={styles.cardModal}>
+        <div ref={modalRef} className={styles.cardModal}>
           <img className={styles.image} src={thumbnail} />
           <span>{title}</span>
           <span>{genre}</span>
