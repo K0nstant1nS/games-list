@@ -4,8 +4,7 @@ import { getGamesRequest } from "../../API";
 const initialState = {
   status: null,
   data: [],
-  loaded: 0,
-  mouseOver: undefined,
+  requestParams: "",
 };
 
 const gamesSlice = createSlice({
@@ -15,7 +14,6 @@ const gamesSlice = createSlice({
     setGamesData: (state, action) => {
       return {
         ...state,
-        loaded: 1,
         status: "success",
         data: action.payload,
       };
@@ -24,11 +22,7 @@ const gamesSlice = createSlice({
       return {
         ...state,
         data: [...state.data, ...action.payload],
-        loaded: state.loaded + 1,
       };
-    },
-    setMouseOver: (state, action) => {
-      return { ...state, mouseOver: action.payload };
     },
     setStatusError: (state, action) => {
       return { ...state, status: "error" };
@@ -36,21 +30,24 @@ const gamesSlice = createSlice({
     setStatusLoading: (state, action) => {
       return { ...state, status: "loading" };
     },
+    setRequestParams: (state, action) => {
+      return { ...state, requestParams: action.payload };
+    },
   },
 });
 
 export const {
   setGamesData,
   loadMore,
-  setMouseOver,
   setStatusLoading,
   setStatusError,
+  setRequestParams,
 } = gamesSlice.actions;
 
-export const getGamesList = () => {
+export const getGamesList = (params = "") => {
   return async (dispatch) => {
     dispatch(setStatusLoading());
-    getGamesRequest()
+    getGamesRequest(params)
       .then((data) => {
         dispatch(setGamesData(data.results));
       })
@@ -60,9 +57,9 @@ export const getGamesList = () => {
   };
 };
 
-export const getNextGamesPage = (a) => {
+export const getNextGamesPage = (a, params) => {
   return async (dispatch) => {
-    getGamesRequest().then((data) => {
+    getGamesRequest(params).then((data) => {
       a.isTrue = true;
       dispatch(loadMore(data.results));
     });

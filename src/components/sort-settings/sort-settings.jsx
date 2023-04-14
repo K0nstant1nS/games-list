@@ -1,21 +1,35 @@
 import React, { useState } from "react";
 import styles from "./sort-settings.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fitlerByPlatform, searchGames } from "../../services/slice/gamesSlice";
+import {
+  fitlerByPlatform,
+  getGamesList,
+  searchGames,
+  setRequestParams,
+} from "../../services/slice/gamesSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getParam } from "../../services/utils";
+import { refreshPage } from "../../API";
 
 function SortSettings() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const param = getParam("sort", location.search);
+  const { requestParams } = useSelector((store) => store.gamesReducer);
   const [searchValue, setSearchValue] = useState("");
 
   const onClick = () => {
-    (param === "decrease") | !param
-      ? navigate("/?sort=increase")
-      : navigate("/?sort=decrease");
+    refreshPage();
+    if (requestParams === "ordering=released") {
+      dispatch(getGamesList("ordering=-released"));
+      dispatch(setRequestParams("ordering=-released"));
+    } else if (requestParams === "ordering=-released") {
+      dispatch(getGamesList("ordering=released"));
+      dispatch(setRequestParams("ordering=released"));
+    } else if (requestParams === "") {
+      dispatch(getGamesList("ordering=released"));
+      dispatch(setRequestParams("ordering=released"));
+    }
   };
 
   const onInputChange = (e) => {

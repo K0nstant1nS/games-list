@@ -15,17 +15,17 @@ const a = { isTrue: true };
 function List() {
   const ref = useRef();
   const dispatch = useDispatch();
-  const { data, loaded, status } = useSelector((store) => store.gamesReducer);
+  const { data, status, requestParams } = useSelector(
+    (store) => store.gamesReducer
+  );
   const location = useLocation();
-  const dateParam = getParam("sort", location.search);
-  let gamesElements = [...data];
   const scrollListener = (e) => {
     const { current } = ref;
     const { height, y } = current.getBoundingClientRect();
     const windowHeight = window.innerHeight;
     if (windowHeight + -y + 300 >= height && a.isTrue) {
       a.isTrue = false;
-      dispatch(getNextGamesPage(a));
+      dispatch(getNextGamesPage(a, requestParams));
     }
   };
 
@@ -50,14 +50,41 @@ function List() {
     };
   }, [ref.current]);
 
-  gamesElements = gamesElements.slice(0, loaded * 20).map((item) => {
-    return <GameCard key={item.id} {...item} />;
-  });
+  const gamesElements = data.reduce(
+    (sum, item, index) => {
+      if (index % 3 === 0) {
+        return [
+          [...sum[0], <GameCard key={item.id} {...item} />],
+          [...sum[1]],
+          [...sum[2]],
+        ];
+      } else if (index % 3 === 1) {
+        return [
+          [...sum[0]],
+          [...sum[1], <GameCard key={item.id} {...item} />],
+          [...sum[2]],
+        ];
+      } else {
+        return [
+          [...sum[0]],
+          [...sum[1]],
+          [...sum[2], , <GameCard key={item.id} {...item} />],
+        ];
+      }
+    },
+    [[], [], []]
+  );
 
   const renderer = () => {
     switch (status) {
       case "success": {
-        return <main className={styles.main}>{gamesElements}</main>;
+        return (
+          <main className={styles.main}>
+            <div className={styles.column}>{gamesElements[0]}</div>
+            <div className={styles.column}>{gamesElements[1]}</div>
+            <div className={styles.column}>{gamesElements[2]}</div>
+          </main>
+        );
       }
       case "loading": {
         return <Loader />;

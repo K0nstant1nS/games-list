@@ -14,5 +14,9 @@ const getRequest = (additionalUrl, options) => {
   );
 };
 
-export const getGamesRequest = () =>
-  getRequest(`/games?page=${page++}&`, getGamesOptions);
+export const refreshPage = () => {
+  page = 1;
+};
+
+export const getGamesRequest = (params) =>
+  getRequest(`/games?page=${page++}&${params}&`, getGamesOptions);
