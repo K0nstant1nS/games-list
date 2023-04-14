@@ -1,8 +1,13 @@
 .card{
-    height: max-content;
     position: relative;
     color: white;
     border-radius: 20px;
+    height: min-content;
+    overflow: hidden;
+}
+
+.card:hover{
+    overflow: visible;
 }
 
 /*.cardModal{
@@ -25,7 +30,7 @@
     align-items: center;
     gap: 10px;
     clear: both;
-    background-color: #454444;
+    background-color: #2f2e2e;
     border-radius: 20px;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
     position: absolute;
@@ -44,6 +49,6 @@
 }
 
 .image{
-    width: 300px;
+    width: 100%;
     border-radius: 20px;
 }

@@ -20,11 +20,11 @@ function SortSettings() {
 
   const onInputChange = (e) => {
     setSearchValue(e.target.value);
-    dispatch(searchGames({ searchValue: e.target.value }));
+    //dispatch(searchGames({ searchValue: e.target.value }));
   };
 
   const onSelectChange = (e) => {
-    dispatch(fitlerByPlatform({ type: e.target.value }));
+    //dispatch(fitlerByPlatform({ type: e.target.value }));
   };
   return (
     <ul className={styles.list}>

@@ -4,21 +4,20 @@ import styles from "./game-card.module.css";
 import { setMouseOver } from "../../services/slice/gamesSlice";
 
 function GameCard({
-  thumbnail,
-  title,
+  background_image,
+  name,
   genre,
   platform,
   developer,
-  release_date,
+  released,
   id,
 }) {
   const ref = useRef(null);
-  const modalRef = useRef(null);
   const dispatch = useDispatch();
   const { mouseOver } = useSelector((store) => store.gamesReducer);
+  const cardStyle = { opacity: mouseOver === id ? 1 : 0 };
 
   const setMouseOverHandler = (e) => {
-    console.log(e.target);
     dispatch(setMouseOver(id));
   };
   const setMouseOutHandler = (e) => {
@@ -28,37 +27,25 @@ function GameCard({
   useEffect(() => {
     if (ref.current) {
       ref.current.addEventListener("mouseenter", setMouseOverHandler);
+      ref.current.addEventListener("mouseleave", setMouseOutHandler);
     }
     return () => {
       if (ref.current) {
         ref.current.removeEventListener("mouseenter", setMouseOverHandler);
+        ref.current.removeEventListener("mouseleave", setMouseOutHandler);
       }
     };
   }, [ref.current]);
 
-  useEffect(() => {
-    if (modalRef.current) {
-      modalRef.current.addEventListener("mouseleave", setMouseOutHandler);
-    }
-    return () => {
-      if (modalRef.current) {
-        modalRef.current.removeEventListener("mouseleave", setMouseOutHandler);
-      }
-    };
-  }, [modalRef.current]);
-
   return (
     <article ref={ref} className={styles.card}>
-      {mouseOver === id ? (
-        <div ref={modalRef} className={styles.cardModal}>
-          <img className={styles.image} src={thumbnail} />
-          <span>{title}</span>
-          <span>{genre}</span>
-          <span>{release_date}</span>
-        </div>
-      ) : (
-        <img className={styles.image} src={thumbnail} />
-      )}
+      <img className={styles.image} src={background_image} />
+      <div style={cardStyle} className={styles.cardModal}>
+        <img className={styles.image} src={background_image} />
+        <span>{name}</span>
+        <span>{genre}</span>
+        <span>{released}</span>
+      </div>
     </article>
   );
 }

@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fakeGameRequest } from "../../API";
+import { getGamesRequest } from "../../API";
 
 const initialState = {
   status: null,
   data: [],
-  visible: [],
   loaded: 0,
   mouseOver: undefined,
 };
@@ -16,44 +15,17 @@ const gamesSlice = createSlice({
     setGamesData: (state, action) => {
       return {
         ...state,
-        loaded: 40,
+        loaded: 1,
         status: "success",
         data: action.payload,
-        visible: action.payload,
       };
     },
-    fitlerByPlatform: (state, action) => {
-      const { type } = action.payload;
-      const loaded = 40;
-      if (type === "ALL") {
-        return { ...state, visible: state.data, loaded };
-      } else if (type === "PC") {
-        const visible = state.data.filter(({ platform }) => {
-          return platform === "PC (Windows)";
-        });
-        return { ...state, visible, loaded };
-      } else if (type === "BROWSER") {
-        const visible = state.data.filter(({ platform }) => {
-          return platform === "Web Browser";
-        });
-        return { ...state, visible, loaded };
-      }
-    },
     loadMore: (state, action) => {
-      const loaded = state.loaded + 40;
-      return { ...state, loaded };
-    },
-    setDefaultAmount: (state, action) => {
-      return { ...state, loaded: 40 };
-    },
-    searchGames: (state, action) => {
-      const { searchValue } = action.payload;
-      const visible = state.data.filter((game) => {
-        return (
-          game.title.toLowerCase().indexOf(searchValue.toLowerCase()) === 0
-        );
-      });
-      return { ...state, visible };
+      return {
+        ...state,
+        data: [...state.data, ...action.payload],
+        loaded: state.loaded + 1,
+      };
     },
     setMouseOver: (state, action) => {
       return { ...state, mouseOver: action.payload };
@@ -69,10 +41,7 @@ const gamesSlice = createSlice({
 
 export const {
   setGamesData,
-  fitlerByPlatform,
   loadMore,
-  setDefaultAmount,
-  searchGames,
   setMouseOver,
   setStatusLoading,
   setStatusError,
@@ -81,13 +50,22 @@ export const {
 export const getGamesList = () => {
   return async (dispatch) => {
     dispatch(setStatusLoading());
-    fakeGameRequest()
+    getGamesRequest()
       .then((data) => {
-        dispatch(setGamesData(data));
+        dispatch(setGamesData(data.results));
       })
       .catch(() => {
         dispatch(setStatusError());
       });
+  };
+};
+
+export const getNextGamesPage = (a) => {
+  return async (dispatch) => {
+    getGamesRequest().then((data) => {
+      a.isTrue = true;
+      dispatch(loadMore(data.results));
+    });
   };
 };
 
