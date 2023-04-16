@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import styles from "./sort-settings.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fitlerByPlatform,
-  getGamesList,
-  searchGames,
-  setRequestParams,
-} from "../../services/slice/gamesSlice";
+import { getGamesList, setRequestParam } from "../../services/slice/gamesSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getParam } from "../../services/utils";
-import { refreshPage } from "../../API";
 
 function SortSettings() {
   const dispatch = useDispatch();
@@ -18,27 +12,25 @@ function SortSettings() {
   const { requestParams } = useSelector((store) => store.gamesReducer);
   const [searchValue, setSearchValue] = useState("");
 
-  const onClick = () => {
-    refreshPage();
-    if (requestParams === "ordering=released") {
-      dispatch(getGamesList("ordering=-released"));
-      dispatch(setRequestParams("ordering=-released"));
-    } else if (requestParams === "ordering=-released") {
-      dispatch(getGamesList("ordering=released"));
-      dispatch(setRequestParams("ordering=released"));
-    } else if (requestParams === "") {
-      dispatch(getGamesList("ordering=released"));
-      dispatch(setRequestParams("ordering=released"));
+  const onClick = async () => {
+    if (requestParams.ordering === "released") {
+      dispatch(setRequestParam({ ordering: "-released", page: 1 }));
+    } else if (
+      requestParams.ordering === "-released" ||
+      !requestParams.ordering
+    ) {
+      dispatch(setRequestParam({ ordering: "released", page: 1 }));
     }
+
+    console.log(requestParams);
   };
 
   const onInputChange = (e) => {
-    setSearchValue(e.target.value);
-    //dispatch(searchGames({ searchValue: e.target.value }));
+    dispatch(setRequestParam({ search: e.target.value, page: 1 }));
   };
 
   const onSelectChange = (e) => {
-    //dispatch(fitlerByPlatform({ type: e.target.value }));
+    dispatch(setRequestParam({ parent_platforms: e.target.value, page: 1 }));
   };
   return (
     <ul className={styles.list}>
@@ -47,7 +39,7 @@ function SortSettings() {
           placeholder="Название игры"
           className={styles.navElem}
           type="text"
-          value={searchValue}
+          value={requestParams.search}
           onChange={onInputChange}
         />
       </li>
@@ -64,11 +56,15 @@ function SortSettings() {
         <select
           className={styles.navElem}
           onChange={onSelectChange}
-          defaultValue="ALL"
+          defaultValue=""
         >
-          <option value="ALL">ALL</option>
-          <option value="PC">PC</option>
-          <option value="BROWSER">BROWSER</option>
+          <option value="">ALL</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
         </select>
       </li>
     </ul>

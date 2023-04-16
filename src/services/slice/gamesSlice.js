@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getGamesRequest } from "../../API";
+import { getGamesRequest, key } from "../../API";
 
 const initialState = {
   status: null,
   data: [],
-  requestParams: "",
+  requestParams: {
+    key: key,
+    page: 1,
+  },
 };
 
 const gamesSlice = createSlice({
@@ -16,12 +19,19 @@ const gamesSlice = createSlice({
         ...state,
         status: "success",
         data: action.payload,
+        requestParams: {
+          ...state.requestParams,
+        },
       };
     },
     loadMore: (state, action) => {
       return {
         ...state,
         data: [...state.data, ...action.payload],
+        requestParams: {
+          ...state.requestParams,
+          page: state.requestParams.page + 1,
+        },
       };
     },
     setStatusError: (state, action) => {
@@ -30,8 +40,11 @@ const gamesSlice = createSlice({
     setStatusLoading: (state, action) => {
       return { ...state, status: "loading" };
     },
-    setRequestParams: (state, action) => {
-      return { ...state, requestParams: action.payload };
+    setRequestParam: (state, action) => {
+      return {
+        ...state,
+        requestParams: { ...state.requestParams, ...action.payload },
+      };
     },
   },
 });
@@ -41,14 +54,15 @@ export const {
   loadMore,
   setStatusLoading,
   setStatusError,
-  setRequestParams,
+  setRequestParam,
 } = gamesSlice.actions;
 
-export const getGamesList = (params = "") => {
+export const getGamesList = (params = {}) => {
   return async (dispatch) => {
     dispatch(setStatusLoading());
     getGamesRequest(params)
       .then((data) => {
+        console.log(data.results);
         dispatch(setGamesData(data.results));
       })
       .catch(() => {
@@ -57,9 +71,9 @@ export const getGamesList = (params = "") => {
   };
 };
 
-export const getNextGamesPage = (a, params) => {
+export const getNextGamesPage = (a, params = {}) => {
   return async (dispatch) => {
-    getGamesRequest(params).then((data) => {
+    getGamesRequest({ ...params, page: params.page + 1 }).then((data) => {
       a.isTrue = true;
       dispatch(loadMore(data.results));
     });

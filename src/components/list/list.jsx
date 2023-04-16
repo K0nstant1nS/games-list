@@ -18,7 +18,6 @@ function List() {
   const { data, status, requestParams } = useSelector(
     (store) => store.gamesReducer
   );
-  const location = useLocation();
   const scrollListener = (e) => {
     const { current } = ref;
     const { height, y } = current.getBoundingClientRect();
@@ -40,15 +39,19 @@ function List() {
   }*/
 
   useEffect(() => {
-    dispatch(getGamesList());
-  }, []);
+    dispatch(getGamesList(requestParams));
+  }, [
+    requestParams.ordering,
+    requestParams["parent_platforms"],
+    requestParams.search,
+  ]);
 
   useEffect(() => {
     document.addEventListener("scroll", scrollListener);
     return () => {
       document.removeEventListener("scroll", scrollListener);
     };
-  }, [ref.current]);
+  }, [ref.current, requestParams]);
 
   const gamesElements = data.reduce(
     (sum, item, index) => {

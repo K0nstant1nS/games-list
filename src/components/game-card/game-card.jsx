@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import webIcon from "../../images/web-24.png";
+import iosIcon from "../../images/ios-logo-24.png";
 import linuxIcon from "../../images/linux-24.png";
 import droidIcon from "../../images/android-24.png";
 import appleIcon from "../../images/apple-logo-24.png";
@@ -6,6 +8,7 @@ import nintendoIcon from "../../images/nintendo-24.png";
 import pcIcon from "../../images/pc-24.png";
 import psIcon from "../../images/ps4-24.png";
 import xboxIcon from "../../images/xbox-24.png";
+import notFound from "../../images/not-found-image.png";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./game-card.module.css";
 import { setMouseOver } from "../../services/slice/gamesSlice";
@@ -19,6 +22,8 @@ const platformIconsSet = {
   "Apple Macintosh": appleIcon,
   Linux: linuxIcon,
   Android: droidIcon,
+  Web: webIcon,
+  iOS: iosIcon,
 };
 
 function GameCard({
@@ -43,17 +48,25 @@ function GameCard({
 
   const platformsElement = (
     <div className={styles.platforms}>
-      {parent_platforms.map(({ platform }) => {
-        return <img src={platformIconsSet[platform.name]} />;
-      })}
+      {parent_platforms
+        ? parent_platforms.map(({ platform }) => {
+            return <img src={platformIconsSet[platform.name]} />;
+          })
+        : []}
     </div>
   );
 
   return (
     <article className={styles.card}>
-      <img className={styles.image} src={background_image} />
+      <img
+        className={styles.image}
+        src={background_image ? background_image : notFound}
+      />
       <div ref={ref} className={styles.cardModal}>
-        <img className={styles.image} src={background_image} />
+        <img
+          className={styles.image}
+          src={background_image ? background_image : notFound}
+        />
         {platformsElement}
         <h2>{name}</h2>
         <ul className={styles.infoList}>

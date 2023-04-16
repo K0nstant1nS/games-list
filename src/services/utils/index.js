@@ -15,6 +15,15 @@ export const getParam = (param, string) => {
   return paramString.split("=")[1];
 };
 
+export const removeParam = (param, string) => {
+  param = `${param}=${getParam(param)}`;
+  return string.replace(param, "");
+};
+
+export const addParam = (param, string) => {
+  return `${string}&${param}`;
+};
+
 export const compareDate = (firstDate, secondDate) => {
   firstDate = firstDate.split("-");
   secondDate = secondDate.split("-");
