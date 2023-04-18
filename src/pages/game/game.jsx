@@ -8,6 +8,7 @@ import metacriticImg from "../../images/metascore-64.png";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { getGameById } from "../../services/slice/gamesSlice";
+import GameRatingSet from "../../components/game-rating-set/game-rating-set";
 
 const reactImagesSet = {
   exceptional: bestImg,
@@ -27,43 +28,6 @@ function GamePage() {
     dispatch(getGameById(id));
   }, []);
 
-  const metaRating = gamePage["metacritic_platforms"] ? (
-    <div className={styles.metaRatingSet}>
-      <img src={metacriticImg} alt="" />
-      <div className={styles.ratingStrings}>
-        {gamePage["metacritic_platforms"].map(
-          ({ metascore, platform, url }) => {
-            return (
-              <p className={`${styles.ratingString} r2`}>
-                {platform.name}: <a href={url}>{metascore}</a>
-              </p>
-            );
-          }
-        )}
-      </div>
-    </div>
-  ) : null;
-
-  const usersRatingElement = (
-    <div className={styles.usersRatingSet}>
-      <h2>Users rating</h2>
-      {gamePage.ratings
-        ? gamePage.ratings.map(({ title, count, percent }) => {
-            return (
-              <div className={styles.usersRating}>
-                <img src={reactImagesSet[title]} />
-                <p className={`${styles.countPercent} r2`}>
-                  <span className={styles.stat}>{count}</span>
-                  <span className={styles.stat}>{percent}%</span>
-                </p>
-              </div>
-            );
-          })
-        : null}
-      {metaRating}
-    </div>
-  );
-
   return (
     <div
       style={{ background: `#${gamePage["dominant_color"]}` }}
@@ -76,7 +40,11 @@ function GamePage() {
       />
       <div className={styles.mainContent}>
         <div className={styles.ratings}>
-          <div>{usersRatingElement}</div>
+          <GameRatingSet
+            metacritic={gamePage.metacritic}
+            ratings={gamePage.ratings}
+            platforms={gamePage["metacritic_platforms"]}
+          />
         </div>
         <div
           className={styles.about}
