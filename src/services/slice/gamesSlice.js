@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getGamesRequest, key } from "../../API";
+import { getGameRequest, getGamesRequest, key } from "../../API";
 
 const initialState = {
   status: null,
+  gamePage: {},
+  gamePageStatus: null,
   data: [],
   requestParams: {
     key: key,
@@ -14,6 +16,16 @@ const gamesSlice = createSlice({
   name: "games",
   initialState,
   reducers: {
+    setGamePage: (state, action) => {
+      console.log(action.payload);
+      return { ...state, gamePage: action.payload, gamePageStatus: "success" };
+    },
+    setGameStatusLoading: (state, action) => {
+      return { ...state, gamePageStatus: "loading" };
+    },
+    setGameStatusError: (state, action) => {
+      return { ...state, gamePageStatus: "error" };
+    },
     setGamesData: (state, action) => {
       return {
         ...state,
@@ -50,6 +62,9 @@ const gamesSlice = createSlice({
 });
 
 export const {
+  setGamePage,
+  setGameStatusError,
+  setGameStatusLoading,
   setGamesData,
   loadMore,
   setStatusLoading,
@@ -77,6 +92,19 @@ export const getNextGamesPage = (a, params = {}) => {
       a.isTrue = true;
       dispatch(loadMore(data.results));
     });
+  };
+};
+
+export const getGameById = (id) => {
+  return (dispatch) => {
+    dispatch(setGameStatusLoading());
+    getGameRequest(id)
+      .then((data) => {
+        dispatch(setGamePage(data));
+      })
+      .catch(() => {
+        dispatch(setGameStatusError());
+      });
   };
 };
 

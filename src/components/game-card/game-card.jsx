@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styles from "./game-card.module.css";
 import { setMouseOver } from "../../services/slice/gamesSlice";
 import CardCloud from "../card-cloud/card-cloud";
+import { useNavigate } from "react-router-dom";
 
 const platformIconsSet = {
   PlayStation: psIcon,
@@ -37,6 +38,11 @@ function GameCard({
 }) {
   const ref = useRef(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onClick = () => {
+    navigate(`game/${id}`);
+  };
 
   const genresElement = (
     <div className={styles.genres}>
@@ -57,7 +63,7 @@ function GameCard({
   );
 
   return (
-    <article className={styles.card}>
+    <article onClick={onClick} className={styles.card}>
       <img
         className={styles.image}
         src={background_image ? background_image : notFound}

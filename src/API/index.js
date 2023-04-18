@@ -16,3 +16,7 @@ const getRequest = (additionalUrl, options) => {
 export const getGamesRequest = (params) => {
   return getRequest("/games?" + new URLSearchParams(params), getGamesOptions);
 };
+
+export const getGameRequest = (id) => {
+  return getRequest(`/games/${id}?key=${key}`);
+};
