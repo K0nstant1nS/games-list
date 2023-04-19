@@ -10,6 +10,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getGameById } from "../../services/slice/gamesSlice";
 import GameRatingSet from "../../components/game-rating-set/game-rating-set";
 import SystemRequirements from "../../components/system-requirements/system-requirements";
+import Loader from "../../components/loader/loader";
 
 const reactImagesSet = {
   exceptional: bestImg,
@@ -29,32 +30,50 @@ function GamePage() {
     dispatch(getGameById(id));
   }, []);
 
-  return (
-    <div
-      style={{ background: `#${gamePage["dominant_color"]}` }}
-      className={styles.main}
-    >
-      <h1 className={styles.gameName}>{gamePage.name}</h1>
-      <img
-        className={styles.backgroundImage}
-        src={gamePage["background_image"]}
-      />
-      <div className={styles.mainContent}>
-        <div className={styles.ratings}>
-          <GameRatingSet
-            metacritic={gamePage.metacritic}
-            ratings={gamePage.ratings}
-            platforms={gamePage["metacritic_platforms"]}
-          />
-        </div>
-        <div
-          className={styles.about}
-          dangerouslySetInnerHTML={{ __html: gamePage.description }}
-        />
-      </div>
-      <SystemRequirements platforms={gamePage.platforms} />
-    </div>
-  );
+  const renderer = () => {
+    switch (gamePageStatus) {
+      case "loading": {
+        return (
+          <div className={styles.loader}>
+            <Loader />
+          </div>
+        );
+      }
+      case "error": {
+        return null;
+      }
+      case "success": {
+        return (
+          <div
+            style={{ background: `#${gamePage["dominant_color"]}` }}
+            className={styles.main}
+          >
+            <h1 className={styles.gameName}>{gamePage.name}</h1>
+            <img
+              className={styles.backgroundImage}
+              src={gamePage["background_image"]}
+            />
+            <div className={styles.mainContent}>
+              <div className={styles.ratings}>
+                <GameRatingSet
+                  metacritic={gamePage.metacritic}
+                  ratings={gamePage.ratings}
+                  platforms={gamePage["metacritic_platforms"]}
+                />
+              </div>
+              <div
+                className={styles.about}
+                dangerouslySetInnerHTML={{ __html: gamePage.description }}
+              />
+            </div>
+            <SystemRequirements platforms={gamePage.platforms} />
+          </div>
+        );
+      }
+    }
+  };
+
+  return renderer();
 }
 
 export default GamePage;

@@ -42,3 +42,18 @@
   font-size: 3rem;
 }
 
+.exceptional-stat{
+  background-color: green;
+}
+
+.recommended-stat{
+  background-color: greenyellow;
+}
+
+.meh-stat{
+ background-color: yellow;
+}
+
+.skip-stat{
+  background-color: red;
+}
