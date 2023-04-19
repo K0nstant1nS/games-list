@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import { getGameById } from "../../services/slice/gamesSlice";
 import GameRatingSet from "../../components/game-rating-set/game-rating-set";
+import SystemRequirements from "../../components/system-requirements/system-requirements";
 
 const reactImagesSet = {
   exceptional: bestImg,
@@ -51,6 +52,7 @@ function GamePage() {
           dangerouslySetInnerHTML={{ __html: gamePage.description }}
         />
       </div>
+      <SystemRequirements platforms={gamePage.platforms} />
     </div>
   );
 }
