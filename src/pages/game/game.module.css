@@ -1,7 +1,7 @@
 .main{
     position: relative;
     min-height: 100vh;
-    padding-bottom: 50px;
+    padding-bottom: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,7 +10,6 @@
 
 .gameName{
     padding-top: 2rem;
-    padding-left: 3rem;
     align-self: flex-start;
     font-size: 4rem;
 }
@@ -27,7 +26,7 @@
 
 .mainContent{
     height: 100%;
-    padding-top: 100px;
+    padding-top: 5rem;
     width: 90%;
     display: grid;
     grid-template-columns: minmax( 300px, 1fr) 1fr;

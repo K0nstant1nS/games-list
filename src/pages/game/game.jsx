@@ -11,6 +11,7 @@ import { getGameById } from "../../services/slice/gamesSlice";
 import GameRatingSet from "../../components/game-rating-set/game-rating-set";
 import SystemRequirements from "../../components/system-requirements/system-requirements";
 import Loader from "../../components/loader/loader";
+import BackButton from "../../components/back-button/back-button";
 
 const reactImagesSet = {
   exceptional: bestImg,
@@ -48,12 +49,13 @@ function GamePage() {
             style={{ background: `#${gamePage["dominant_color"]}` }}
             className={styles.main}
           >
-            <h1 className={styles.gameName}>{gamePage.name}</h1>
             <img
               className={styles.backgroundImage}
               src={gamePage["background_image"]}
             />
             <div className={styles.mainContent}>
+              <BackButton />
+              <h1 className={styles.gameName}>{gamePage.name}</h1>
               <div className={styles.ratings}>
                 <GameRatingSet
                   metacritic={gamePage.metacritic}

@@ -88,6 +88,7 @@
 }
 
 .ratingIndicate{
+    max-height: 500px;
     margin-top: 80px;
     max-width: 100px;
     min-width: 50px;
@@ -98,14 +99,14 @@
 
 
 .green{
-    background-color: rgb(142, 204, 50);
+    background-color: rgb(38, 255, 0);
 }
 
 .yellow{
-    background-color: rgb(229, 212, 22);
+    background-color: rgb(254, 233, 1);
 }
 
 .red{
-    background-color: rgb(227, 28, 28);
+    background-color: rgb(255, 30, 30);
 }
 

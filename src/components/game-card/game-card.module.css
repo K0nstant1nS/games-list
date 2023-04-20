@@ -60,6 +60,10 @@
     border-radius: 20px;
 }
 
+.name{
+    text-align: center;
+}
+
 .platforms{
     display: flex;
     flex-direction: row;

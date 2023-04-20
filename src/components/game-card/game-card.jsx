@@ -74,7 +74,7 @@ function GameCard({
           src={background_image ? background_image : notFound}
         />
         {platformsElement}
-        <h2>{name}</h2>
+        <h2 className={styles.name}>{name}</h2>
         <ul className={styles.infoList}>
           <li className={styles.infoCell}>
             <span>Дата выхода:</span>
@@ -89,7 +89,6 @@ function GameCard({
             <span>{rating}</span>
           </li>
         </ul>
-        {/*genresElement*/}
       </div>
     </article>
   );
