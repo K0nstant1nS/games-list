@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/games-list/static/css/main.cf285b7d.css",
+    "main.js": "/games-list/static/js/main.5da8a5ba.js",
+    "static/media/not-found-image.png": "/games-list/static/media/not-found-image.c4ba1e764e9cd9c83ef1.png",
+    "index.html": "/games-list/index.html",
+    "main.cf285b7d.css.map": "/games-list/static/css/main.cf285b7d.css.map",
+    "main.5da8a5ba.js.map": "/games-list/static/js/main.5da8a5ba.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cf285b7d.css",
+    "static/js/main.5da8a5ba.js"
+  ]
+}
